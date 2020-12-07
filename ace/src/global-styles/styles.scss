@@ -1,0 +1,19 @@
+@import './reset';
+
+
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+.container {
+  width: 80%;
+  display: flex;
+  align-items: center;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+button.mat-menu-item {
+  line-height: 24px;
+  height: 24px;
+}
