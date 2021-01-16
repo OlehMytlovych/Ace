@@ -1,5 +1,7 @@
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Component, OnInit } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
+
 
 @Component({
   selector: 'app-new-job-dialog',
@@ -8,20 +10,36 @@ import { MatDialogRef } from '@angular/material/dialog';
 })
 export class NewJobDialogComponent implements OnInit {
   public date: Date;
+  public jobForm: FormGroup;
 
   constructor(
-    public dialogRef: MatDialogRef<NewJobDialogComponent>) {
+    public dialogRef: MatDialogRef<NewJobDialogComponent>,
+    public formBuilder: FormBuilder) {
+
     this.date = new Date();
   }
 
   public ngOnInit(): void {
+    this.jobForm = this.formBuilder.group({
+      shortDescription: ['', Validators.required],
+      fullDescription: ['', Validators.required],
+      address: ['', Validators.required],
+      payment: ['', Validators.pattern('^[0-9]*[.,]?[0-9]+$')]
+    });
   }
 
-  public onNoClick(): void {
+  public onCancel(): void {
+    //TODO: solve the ENTER on form problem
     this.dialogRef.close();
   }
 
-  public onCreateClick(): void {
-    this.dialogRef.close();
+  public onSubmit(): void {
+    console.log(this.jobForm.invalid)
+    if (this.jobForm.invalid) {
+      return;
+    }
+
+    alert('SUCCESS!! :-)\n\n' + JSON.stringify(this.jobForm.value));
+    //this.dialogRef.close();
   }
 }
