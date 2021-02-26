@@ -2,7 +2,6 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Component, OnInit } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 
-
 @Component({
   selector: 'app-new-job-dialog',
   templateUrl: './new-job-dialog.component.html',
@@ -24,22 +23,20 @@ export class NewJobDialogComponent implements OnInit {
       shortDescription: ['', Validators.required],
       fullDescription: ['', Validators.required],
       address: ['', Validators.required],
-      payment: ['', Validators.pattern('^[0-9]*[.,]?[0-9]+$')]
+      payment: ['', Validators.pattern('^[0-9]*[.,]?[0-9]+$')],
     });
   }
 
   public onCancel(): void {
-    //TODO: solve the ENTER on form problem
     this.dialogRef.close();
   }
 
-  public onSubmit(): void {
-    console.log(this.jobForm.invalid)
+  public onSubmit(): boolean {
     if (this.jobForm.invalid) {
-      return;
+      return false;
     }
 
-    alert('SUCCESS!! :-)\n\n' + JSON.stringify(this.jobForm.value));
-    //this.dialogRef.close();
+    alert(`SUCCESS!! :-)\n\n ${JSON.stringify(this.jobForm.value)}`);
+    this.dialogRef.close();
   }
 }
