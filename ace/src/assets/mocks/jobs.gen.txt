@@ -1,0 +1,13 @@
+[
+  '{{repeat(30)}}',
+  {
+    _id: '{{objectId()}}',
+    guid: '{{guid()}}',
+    picture: 'http://placehold.it/400x400',
+    shortDescription: '{{lorem(6, "words")}}',
+    longDescription: '{{lorem(40, "words")}}',
+    payment: '{{integer(100, 1500)}}',
+    address: '{{integer(100, 999)}} {{street()}}, {{city()}}, {{state()}}, {{integer(100, 10000)}}',
+    ownerId: '{{objectId()}}'
+  }
+]

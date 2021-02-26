@@ -1,3 +1,5 @@
+import { MatInputModule } from '@angular/material/input';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HomePageComponent } from './home-page/home-page.component';
@@ -13,6 +15,9 @@ import { NewJobDialogComponent } from './new-job-dialog/new-job-dialog.component
     MatButtonModule,
     MatDialogModule,
     MatIconModule,
+    FormsModule,
+    ReactiveFormsModule,
+    MatInputModule
   ],
   exports: [
     HomePageComponent,
