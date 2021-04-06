@@ -17,7 +17,7 @@ import { NewJobDialogComponent } from './new-job-dialog/new-job-dialog.component
     MatIconModule,
     FormsModule,
     ReactiveFormsModule,
-    MatInputModule
+    MatInputModule,
   ],
   exports: [
     HomePageComponent,

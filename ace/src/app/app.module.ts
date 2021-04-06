@@ -24,6 +24,7 @@ import { EffectsModule } from '@ngrx/effects';
 import { reducers, metaReducers } from './store/reducers';
 import { environment } from '../environments/environment';
 import { CategoriesEffects } from './store/effects/categories.effects';
+import { UserAuthEffects } from './store/effects/user-auth.effects';
 
 @NgModule({
   declarations: [
@@ -51,7 +52,7 @@ import { CategoriesEffects } from './store/effects/categories.effects';
       },
     }),
     !environment.production ? StoreDevtoolsModule.instrument() : [],
-    EffectsModule.forRoot([CategoriesEffects]),
+    EffectsModule.forRoot([CategoriesEffects, UserAuthEffects]),
   ],
   providers: [Title],
   bootstrap: [AppComponent],

@@ -20,7 +20,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   public isSignedIn: Observable<boolean> = this.store.pipe(select(selectUserRole), map(role => Boolean(role)));
   public time: Date;
   private allSubscribtions: Subscription = new Subscription();
-  public currentRoute: string;
+  public currentRoute = '';
 
   constructor(private router: Router,
               private store: Store<State>,
@@ -67,6 +67,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   public changeCurrenrRoute(newRoute: string) {
-    this.currentRoute = newRoute
+    this.currentRoute = newRoute;
   }
 }
