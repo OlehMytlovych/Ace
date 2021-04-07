@@ -60,12 +60,12 @@ export const selectLoading = createSelector(
   (state: LoadingState) => state.loading,
 );
 
-export const selectUserAuthUserData = createSelector(
+export const selectUserAuthUpData = createSelector(
   selectUserAuthFeature,
   (state: userAuthState) => state.signUpUserData,
 );
 
-export const selectUserAuthResponse = createSelector(
+export const selectUserAuthUpResponse = createSelector(
   selectUserAuthFeature,
   (state: userAuthState) => state.signUpResponce,
 );
@@ -73,4 +73,14 @@ export const selectUserAuthResponse = createSelector(
 export const selectUserAuthError = createSelector(
   selectUserAuthFeature,
   (state: userAuthState) => state.error,
+);
+
+export const selectUserAuthInData = createSelector(
+  selectUserAuthFeature,
+  (state: userAuthState) => state.signInUserData,
+);
+
+export const selectUserAuthInResponse = createSelector(
+  selectUserAuthFeature,
+  (state: userAuthState) => state.signInResponce,
 );

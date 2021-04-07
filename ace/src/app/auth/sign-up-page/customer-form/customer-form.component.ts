@@ -1,3 +1,4 @@
+import { UserAuthActionTypes } from './../../../store/actions/user-auth.actions';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';

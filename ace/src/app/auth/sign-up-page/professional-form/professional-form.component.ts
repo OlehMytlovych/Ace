@@ -79,7 +79,7 @@ export class ProfessionalFormComponent implements OnInit {
 
     const newPro = Object.assign({}, this.generalForm.value, this.detailsForm.value, this.finalForm.value);
 
-    this.store.dispatch(UserAuthActions.SignUpUser(newPro));
+    this.store.dispatch(UserAuthActions.SignUpUser({ data: newPro }));
 
     // this.routeToHome();
   }
