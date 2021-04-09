@@ -1,3 +1,4 @@
+import { OverlayService } from './../../sharedServices/overlay-spinner/overlay/overlay.service';
 import { mergeMap, catchError, map } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
@@ -15,41 +16,52 @@ import { UserAuthActionTypes } from './../actions/user-auth.actions';
 export class UserAuthEffects {
   private userSignUpData: any;
   private userSignInData: any;
-
-  public signUp = createEffect(() => this.actions$.pipe(
-    ofType(UserAuthActionTypes.SignUpUser),
-    mergeMap(() => this.authService.signUp(this.userSignUpData.email, this.userSignUpData.password)
-    .pipe(
-      map((response: SignUpResponse) => {
-        return { type: UserAuthActionTypes.SignUpUserSuccess, data: response };
-      }),
-      catchError((err: HttpErrorResponse) => {
-        return of({ type: UserAuthActionTypes.SignUpUserFailure, error: err.error.message });
-      }),
-    )),
-  ));
-
-  public signIn = createEffect(() => this.actions$.pipe(
-    ofType(UserAuthActionTypes.SignInUser),
-    mergeMap(() => this.authService.signIn(this.userSignInData.email, this.userSignInData.password)
-    .pipe(
-      map((response: SignInResponse) => {
-        return { type: UserAuthActionTypes.SignInUserSuccess, data: response };
-      }),
-      catchError((err: HttpErrorResponse) => {
-        return of({ type: UserAuthActionTypes.SignInUserFailure, error: err.error.message });
-      }),
-    )),
-  ));
-
   constructor(private actions$: Actions,
               private authService: AuthService,
-              private store: Store<State>) {
+              private store: Store<State>,
+              private overlayService: OverlayService) {
     this.store.pipe(select(selectUserAuthUpData)).subscribe(userSignUpDataPayload => {
       this.userSignUpData = userSignUpDataPayload?.data;
     });
     this.store.pipe(select(selectUserAuthInData)).subscribe(userSignInDataPayload => {
       this.userSignInData = userSignInDataPayload?.data;
-    })
+    });
   }
+
+  public signUp = createEffect(() => this.actions$.pipe(
+    ofType(UserAuthActionTypes.SignUpUser),
+    mergeMap(() => {
+      this.overlayService.enable();
+      return this.authService.signUp(this.userSignUpData.email, this.userSignUpData.password)
+        .pipe(
+          map((response: SignUpResponse) => {
+            this.overlayService.disable();
+            return { type: UserAuthActionTypes.SignUpUserSuccess, data: response };
+          }),
+          catchError((err: HttpErrorResponse) => {
+            this.overlayService.disable();
+            return of({ type: UserAuthActionTypes.SignUpUserFailure, error: err.error.message });
+          }),
+    ); },
+    ),
+  ));
+
+  public signIn = createEffect(() => this.actions$.pipe(
+    ofType(UserAuthActionTypes.SignInUser),
+    mergeMap(() => {
+      this.overlayService.enable();
+      return this.authService.signIn(this.userSignInData.email, this.userSignInData.password)
+        .pipe(
+          map((response: SignInResponse) => {
+            this.overlayService.disable();
+            return { type: UserAuthActionTypes.SignInUserSuccess, data: response };
+          }),
+          catchError((err: HttpErrorResponse) => {
+            this.overlayService.disable();
+            return of({ type: UserAuthActionTypes.SignInUserFailure, error: err.error.message });
+          }),
+        ); },
+    ),
+  ));
+
 }

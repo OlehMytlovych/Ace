@@ -26,24 +26,32 @@ import { environment } from '../environments/environment';
 import { CategoriesEffects } from './store/effects/categories.effects';
 import { UserAuthEffects } from './store/effects/user-auth.effects';
 
+import { ProgressSpinnerComponent } from './sharedServices/overlay-spinner/progress-spinner/progress-spinner.component';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { OverlayModule } from '@angular/cdk/overlay';
+import { OverlayService } from './sharedServices/overlay-spinner/overlay/overlay.service';
+
 @NgModule({
   declarations: [
     AppComponent,
+    ProgressSpinnerComponent,
     HeaderComponent,
     FooterComponent,
     NotFoundComponent,
   ],
   imports: [
     BrowserModule,
+    OverlayModule,
     HttpClientModule,
+    AppRoutingModule,
+    BrowserAnimationsModule,
     AuthModule,
     HomeModule,
     JobsModule,
     PartnersModule,
-    BrowserAnimationsModule,
     MatButtonModule,
     MatMenuModule,
-    AppRoutingModule,
+    MatProgressSpinnerModule,
     StoreModule.forRoot(reducers, {
       metaReducers,
       runtimeChecks: {
@@ -54,7 +62,7 @@ import { UserAuthEffects } from './store/effects/user-auth.effects';
     !environment.production ? StoreDevtoolsModule.instrument() : [],
     EffectsModule.forRoot([CategoriesEffects, UserAuthEffects]),
   ],
-  providers: [Title],
+  providers: [Title, OverlayService],
   bootstrap: [AppComponent],
 })
 export class AppModule { }

@@ -1,3 +1,4 @@
+import { OverlayService } from './../../sharedServices/overlay-spinner/overlay/overlay.service';
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { of } from 'rxjs';
@@ -7,17 +8,25 @@ import { CategoriesActionTypes } from '../actions/categories.actions';
 
 @Injectable()
 export class CategoriesEffects {
+  constructor(private actions$: Actions,
+              private categoryService: CategoryService,
+              private overlayService: OverlayService) {}
 
   public loadCategories = createEffect(() => this.actions$.pipe(
     ofType(CategoriesActionTypes.LoadCategories),
-    mergeMap(() => this.categoryService.getAll()
+    mergeMap(() => {
+      this.overlayService.enable();
+      return this.categoryService.getAll()
       .pipe(
-        map(categories => ({ type: CategoriesActionTypes.LoadCategoriesSuccess , data: categories })),
-        catchError(err => of({ type: CategoriesActionTypes.LoadCategoriesFailure, error: err })),
-      )),
-    ));
-
-  constructor(private actions$: Actions,
-              private categoryService: CategoryService) {}
-
+        map(categories => {
+          this.overlayService.disable();
+          return { type: CategoriesActionTypes.LoadCategoriesSuccess , data: categories };
+        }),
+        catchError(err => {
+          this.overlayService.disable();
+          return of({ type: CategoriesActionTypes.LoadCategoriesFailure, error: err });
+        }),
+      );
+    }),
+  ));
 }

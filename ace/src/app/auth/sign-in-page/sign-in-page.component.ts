@@ -25,16 +25,12 @@ export class SignInPageComponent implements OnInit {
   }
 
   public onSubmit() {
-    // stop here if form is invalid
     if (this.loginForm.invalid) {
       this.submitted = false;
       return;
     }
     this.submitted = true;
-    
+
     this.store.dispatch(UserAuthActions.SignInUser({ data: this.loginForm.value }));
-    //alert('SUCCESS!! :-)\n\n' + JSON.stringify(this.loginForm.value));
-    //this.store.dispatch(UserRoleActions.setUserRole({ data: userRoles.Customer }));
-    //this.router.navigate(['home']);
   }
 }

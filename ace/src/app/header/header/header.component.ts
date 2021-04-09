@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, NgZone, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, NgZone, ChangeDetectionStrategy, ChangeDetectorRef, AfterViewInit } from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
 import {  Router, NavigationEnd } from '@angular/router';
@@ -15,7 +15,7 @@ import { filter } from 'rxjs/operators';
   styleUrls: ['./header.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class HeaderComponent implements OnInit, OnDestroy {
+export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
   public categories$: Observable<string[]> = this.store.pipe(select(selectCategories));
   public isSignedIn: Observable<boolean> = this.store.pipe(select(selectUserRole), map(role => Boolean(role)));
   public time: Date;
@@ -29,7 +29,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   public ngOnInit(): void {
     this.ngZone.runOutsideAngular(() => this.enableClock());
-    this.store.dispatch(CategoriesActions.loadCategories());
 
     const queryParamsSubscription =  this.router.events.pipe(
       filter(event => event instanceof NavigationEnd),
@@ -39,7 +38,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
     this.allSubscribtions.add(queryParamsSubscription);
   }
-
+  public ngAfterViewInit() {
+    this.store.dispatch(CategoriesActions.loadCategories());
+  }
   public ngOnDestroy(): void {
     this.allSubscribtions.unsubscribe();
   }
