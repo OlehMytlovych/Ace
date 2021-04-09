@@ -1,12 +1,12 @@
+import { Store, select } from '@ngrx/store';
+import { Router } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormArray, FormControl } from '@angular/forms';
 import { Observable } from 'rxjs';
+
 import { MustMatch } from '../../../helpers/mustMatch';
-import { Store, select } from '@ngrx/store';
 import { State, selectCategories } from '../../../store/reducers/index';
-import * as UserRoleActions from '../../../store/actions/user-role.actions';
-import { userRoles } from '../../../userRoles';
-import { Router } from '@angular/router';
+import * as UserAuthActions from '../../../store/actions/user-auth.actions';
 
 @Component({
   selector: 'app-professional-form',
@@ -70,8 +70,7 @@ export class ProfessionalFormComponent implements OnInit {
   public checkIfAnyInvalid() {
     return this.generalForm.invalid || this.detailsForm.invalid || this.finalForm.invalid;
   }
-  public onSubmit(/* checkIfAnyInvalid: () => boolean */) {
-    // stop here if form is invalid
+  public onSubmit() {
     if (this.generalForm.invalid || this.detailsForm.invalid || this.finalForm.invalid) {
       this.submitted = false;
       return 1;
@@ -80,11 +79,9 @@ export class ProfessionalFormComponent implements OnInit {
 
     const newPro = Object.assign({}, this.generalForm.value, this.detailsForm.value, this.finalForm.value);
 
-    alert('SUCCESS!! :-)\n\n' + JSON.stringify(newPro));
+    this.store.dispatch(UserAuthActions.SignUpUser({ data: newPro }));
 
-    this.store.dispatch(UserRoleActions.setUserRole({ data: userRoles.Professional }));
-
-    this.routeToHome();
+    // this.routeToHome();
   }
 
   private routeToHome() {

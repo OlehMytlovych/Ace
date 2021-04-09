@@ -2,8 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { State } from '../../store/reducers/index';
-import * as UserRoleActions from '../../store/actions/user-role.actions';
-import { userRoles } from '../../userRoles';
+import * as UserAuthActions from '../../store/actions/user-auth.actions';
 import { Router } from '@angular/router';
 
 @Component({
@@ -32,9 +31,10 @@ export class SignInPageComponent implements OnInit {
       return;
     }
     this.submitted = true;
-    alert('SUCCESS!! :-)\n\n' + JSON.stringify(this.loginForm.value));
-
-    this.store.dispatch(UserRoleActions.setUserRole({ data: userRoles.Customer }));
-    this.router.navigate(['home']);
+    
+    this.store.dispatch(UserAuthActions.SignInUser({ data: this.loginForm.value }));
+    //alert('SUCCESS!! :-)\n\n' + JSON.stringify(this.loginForm.value));
+    //this.store.dispatch(UserRoleActions.setUserRole({ data: userRoles.Customer }));
+    //this.router.navigate(['home']);
   }
 }

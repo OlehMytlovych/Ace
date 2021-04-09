@@ -17,7 +17,7 @@ import { SignUpPageComponent } from './sign-up-page/sign-up-page.component';
     ProfessionalFormComponent,
     CustomerFormComponent,
     SignInPageComponent,
-    SignUpPageComponent
+    SignUpPageComponent,
   ],
   imports: [
     CommonModule,

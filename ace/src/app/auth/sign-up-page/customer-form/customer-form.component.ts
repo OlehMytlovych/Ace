@@ -1,11 +1,11 @@
+import { UserAuthActionTypes } from './../../../store/actions/user-auth.actions';
 import { Component, OnInit } from '@angular/core';
-import { MustMatch } from '../../../helpers/mustMatch';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
+
 import { State } from '../../../store/reducers/index';
-import * as UserRoleActions from '../../../store/actions/user-role.actions';
-import { userRoles } from '../../../userRoles';
-import { Router } from '@angular/router';
+import { MustMatch } from '../../../helpers/mustMatch';
+import * as UserAuthActions from '../../../store/actions/user-auth.actions';
 
 @Component({
   selector: 'app-customer-form',
@@ -14,11 +14,10 @@ import { Router } from '@angular/router';
 })
 export class CustomerFormComponent implements OnInit {
   public generalForm: FormGroup;
-  private submitted: boolean;
+  public submitted = false;
 
   constructor(private formBuilder: FormBuilder,
-              private store: Store<State>,
-              private router: Router) { }
+              private store: Store<State>) { }
 
   public ngOnInit(): void {
     this.generalForm = this.formBuilder.group({
@@ -34,14 +33,14 @@ export class CustomerFormComponent implements OnInit {
   }
 
   public onSubmit() {
-    // stop here if form is invalid
     if (this.generalForm.invalid) {
       this.submitted = false;
       return;
     }
     this.submitted = true;
-    alert('SUCCESS!! :-)\n\n' + JSON.stringify(this.generalForm.value));
-    this.store.dispatch(UserRoleActions.setUserRole({ data: userRoles.Customer }));
-    this.router.navigate(['home']);
+
+    this.store.dispatch(UserAuthActions.SignUpUser({ data: this.generalForm.value }));
+
+    // this.router.navigate(['home']);
   }
 }
