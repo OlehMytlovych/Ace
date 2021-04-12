@@ -28,7 +28,9 @@ export class OverlayService {
   }
 
   public enable() {
-    if (this.overlayRef) { this.overlayRef.attach(this.templatePortal); }
+    if (this.overlayRef && !this.overlayRef.hasAttached()) {
+      this.overlayRef.attach(this.templatePortal);
+    }
   }
 
   public disable() {

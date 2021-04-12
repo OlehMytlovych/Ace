@@ -30,6 +30,7 @@ import { ProgressSpinnerComponent } from './sharedServices/overlay-spinner/progr
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { OverlayModule } from '@angular/cdk/overlay';
 import { OverlayService } from './sharedServices/overlay-spinner/overlay/overlay.service';
+import { LoadingEffects } from './store/effects/loading.effects';
 
 @NgModule({
   declarations: [
@@ -60,7 +61,7 @@ import { OverlayService } from './sharedServices/overlay-spinner/overlay/overlay
       },
     }),
     !environment.production ? StoreDevtoolsModule.instrument() : [],
-    EffectsModule.forRoot([CategoriesEffects, UserAuthEffects]),
+    EffectsModule.forRoot([CategoriesEffects, UserAuthEffects, LoadingEffects]),
   ],
   providers: [Title, OverlayService],
   bootstrap: [AppComponent],

@@ -6,6 +6,7 @@ import { Store, select } from '@ngrx/store';
 import { of } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
 
+import * as LoadingActions from '../actions/loading.actions';
 import { SignInResponse } from './../../interfaces/signInResponse';
 import { SignUpResponse } from './../../interfaces/signUpResponse';
 import { State, selectUserAuthUpData, selectUserAuthInData } from './../reducers/index';
@@ -31,15 +32,16 @@ export class UserAuthEffects {
   public signUp = createEffect(() => this.actions$.pipe(
     ofType(UserAuthActionTypes.SignUpUser),
     mergeMap(() => {
-      this.overlayService.enable();
+      this.store.dispatch(LoadingActions.setLoadingTrue());
+
       return this.authService.signUp(this.userSignUpData.email, this.userSignUpData.password)
         .pipe(
           map((response: SignUpResponse) => {
-            this.overlayService.disable();
+            this.store.dispatch(LoadingActions.setLoadingFalse());
             return { type: UserAuthActionTypes.SignUpUserSuccess, data: response };
           }),
           catchError((err: HttpErrorResponse) => {
-            this.overlayService.disable();
+            this.store.dispatch(LoadingActions.setLoadingFalse());
             return of({ type: UserAuthActionTypes.SignUpUserFailure, error: err.error.message });
           }),
     ); },
@@ -49,15 +51,15 @@ export class UserAuthEffects {
   public signIn = createEffect(() => this.actions$.pipe(
     ofType(UserAuthActionTypes.SignInUser),
     mergeMap(() => {
-      this.overlayService.enable();
+      this.store.dispatch(LoadingActions.setLoadingTrue());
       return this.authService.signIn(this.userSignInData.email, this.userSignInData.password)
         .pipe(
           map((response: SignInResponse) => {
-            this.overlayService.disable();
+            this.store.dispatch(LoadingActions.setLoadingFalse());
             return { type: UserAuthActionTypes.SignInUserSuccess, data: response };
           }),
           catchError((err: HttpErrorResponse) => {
-            this.overlayService.disable();
+            this.store.dispatch(LoadingActions.setLoadingFalse());
             return of({ type: UserAuthActionTypes.SignInUserFailure, error: err.error.message });
           }),
         ); },
