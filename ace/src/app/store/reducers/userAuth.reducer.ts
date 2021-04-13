@@ -36,7 +36,7 @@ const userAuthReducer = createReducer(
   on(UserAuthActions.SignUpUserSuccess, (state, action) => ({ ...state, signUpUserData: null, signUpResponce: action.data, error: null })),
   on(UserAuthActions.SignUpUserFailure, (state, action) => ({ ...state, signUpUserData: null, signUpResponce: null, error: action.error })),
   on(UserAuthActions.SignInUser, (state, action) => {
-    return { ...state, signInUserData: action, signInResponce: null, error: null };
+    return { ...state, signInUserData: action.data, signInResponce: null, error: null };
   }),
   on(UserAuthActions.SignInUserSuccess, (state, action) => {
     return { ...state, signInUserData: null, signInResponce: action.data, error: null };

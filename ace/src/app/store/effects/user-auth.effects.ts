@@ -1,4 +1,4 @@
-import { OverlayService } from './../../sharedServices/overlay-spinner/overlay/overlay.service';
+import { ErrorDialogService } from './../../sharedServices/error-dialog/error-dialog.service';
 import { mergeMap, catchError, map } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
@@ -20,12 +20,12 @@ export class UserAuthEffects {
   constructor(private actions$: Actions,
               private authService: AuthService,
               private store: Store<State>,
-              private overlayService: OverlayService) {
+              private errorDialogService: ErrorDialogService) {
     this.store.pipe(select(selectUserAuthUpData)).subscribe(userSignUpDataPayload => {
-      this.userSignUpData = userSignUpDataPayload?.data;
+      this.userSignUpData = userSignUpDataPayload;
     });
     this.store.pipe(select(selectUserAuthInData)).subscribe(userSignInDataPayload => {
-      this.userSignInData = userSignInDataPayload?.data;
+      this.userSignInData = userSignInDataPayload;
     });
   }
 
@@ -33,7 +33,7 @@ export class UserAuthEffects {
     ofType(UserAuthActionTypes.SignUpUser),
     mergeMap(() => {
       this.store.dispatch(LoadingActions.setLoadingTrue());
-
+      console.log(this.userSignUpData)
       return this.authService.signUp(this.userSignUpData.email, this.userSignUpData.password)
         .pipe(
           map((response: SignUpResponse) => {
@@ -42,7 +42,8 @@ export class UserAuthEffects {
           }),
           catchError((err: HttpErrorResponse) => {
             this.store.dispatch(LoadingActions.setLoadingFalse());
-            return of({ type: UserAuthActionTypes.SignUpUserFailure, error: err.error.message });
+            this.errorDialogService.setNewError(err.error.error.message);
+            return of({ type: UserAuthActionTypes.SignUpUserFailure, error: err.error.error.message });
           }),
     ); },
     ),
@@ -60,10 +61,10 @@ export class UserAuthEffects {
           }),
           catchError((err: HttpErrorResponse) => {
             this.store.dispatch(LoadingActions.setLoadingFalse());
-            return of({ type: UserAuthActionTypes.SignInUserFailure, error: err.error.message });
+            this.errorDialogService.setNewError(err.error.error.message);
+            return of({ type: UserAuthActionTypes.SignInUserFailure, error: err.error.error.message });
           }),
-        ); },
-    ),
+        );
+    }),
   ));
-
 }

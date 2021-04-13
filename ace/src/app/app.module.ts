@@ -31,7 +31,8 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { OverlayModule } from '@angular/cdk/overlay';
 import { OverlayService } from './sharedServices/overlay-spinner/overlay/overlay.service';
 import { LoadingEffects } from './store/effects/loading.effects';
-
+import { ErrorDialogComponent } from './sharedServices/error-dialog/error-dialog.component';
+import { MatDialogModule } from '@angular/material/dialog';
 @NgModule({
   declarations: [
     AppComponent,
@@ -39,6 +40,7 @@ import { LoadingEffects } from './store/effects/loading.effects';
     HeaderComponent,
     FooterComponent,
     NotFoundComponent,
+    ErrorDialogComponent,
   ],
   imports: [
     BrowserModule,
@@ -53,6 +55,7 @@ import { LoadingEffects } from './store/effects/loading.effects';
     MatButtonModule,
     MatMenuModule,
     MatProgressSpinnerModule,
+    MatDialogModule,
     StoreModule.forRoot(reducers, {
       metaReducers,
       runtimeChecks: {
